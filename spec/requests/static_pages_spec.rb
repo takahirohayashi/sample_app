@@ -7,9 +7,14 @@ describe "Static pages" do #RSpec はダブルクォート (") で囲まれた�
       expect(page).to have_content('Sample App') #Capybaraが提供するpage変数を使って、アクセスした結果のページに正しいコンテンツが表示されているかどうかをテストしています。
     end
 
-    it "'Home' というタイトルを含んでいるか" do
+    it "'Ruby on Rails Tutorial Sample App' というタイトルを含んでいるか" do
       visit '/static_pages/home'
-      expect(page).to have_title("Ruby on Rails Tutorial Sample App | Home")
+      expect(page).to have_title("Ruby on Rails Tutorial Sample App")
+    end
+
+    it "'| Home' というタイトルを含んでいないか" do
+      visit '/static_pages/home'
+      expect(page).not_to have_title('| Home')
     end
   end
 
@@ -34,6 +39,18 @@ describe "Static pages" do #RSpec はダブルクォート (") で囲まれた�
     it "'About Us' というタイトルを含んでるか？" do
       visit '/static_pages/about'
       expect(page).to have_title("Ruby on Rails Tutorial Sample App | About Us")
+    end
+  end
+
+  describe "Contact ページ" do
+    it "'Contact' という文字が含まれていないといけない" do
+      visit '/static_pages/contact'
+      expect(page).to have_content('Contact')
+    end
+
+    it "'Contact' というタイトルを含んでるか？" do
+      visit '/static_pages/contact'
+      expect(page).to have_title("Ruby on Rails Tutorial Sample App | Contact")
     end
   end
 
