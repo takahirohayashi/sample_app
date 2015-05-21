@@ -1,57 +1,36 @@
 require 'spec_helper'
 
-describe "Static pages" do #RSpec はダブルクォート (") で囲まれた文字列を無視します
-  describe "Home ページ" do
-    it "'Sample App'という文字が含まれてないといけない" do
-      visit '/static_pages/home' #Capybaraのvisit機能を使って、ブラウザでの/static_pages/homeURLへのアクセスをシミュレーションします。
-      expect(page).to have_content('Sample App') #Capybaraが提供するpage変数を使って、アクセスした結果のページに正しいコンテンツが表示されているかどうかをテストしています。
-    end
+describe "Static pagesのテスト" do #RSpec はダブルクォート (") で囲まれた文字列を無視します
 
-    it "'Ruby on Rails Tutorial Sample App' というタイトルを含んでいるか" do
-      visit '/static_pages/home'
-      expect(page).to have_title("Ruby on Rails Tutorial Sample App")
-    end
+  subject { page }
 
-    it "'| Home' というタイトルを含んでいないか" do
-      visit '/static_pages/home'
-      expect(page).not_to have_title('| Home')
-    end
+  describe "Home ページのテスト" do
+    before { visit root_path }
+
+    it { should have_content('Sample App')}
+    it { should have_title(full_title(''))}
+    it { should_not have_title('| home')}
   end
 
-  describe "Help ページ" do
-    it "'Help'という文字が含まれてないといけない" do
-      visit '/static_pages/help' #Capybaraのvisit機能を使って、ブラウザでの/static_pages/homeURLへのアクセスをシミュレーションします。
-      expect(page).to have_content('Help') #Capybaraが提供するpage変数を使って、アクセスした結果のページに正しいコンテンツが表示されているかどうかをテストしています。
-    end
+  describe "Help ページのテスト" do
+    before { visit help_path }
 
-    it "'Help' というタイトルが含まれているか？" do
-      visit '/static_pages/help'
-      expect(page).to have_title("Ruby on Rails Tutorial Sample App | Help")
-    end
+    it { should have_content('Help') }
+    it { should have_title(full_title('Help')) }
   end
 
-  describe "About ページ" do
-    it "'About Us' という文字が含まれていないといけない" do
-      visit '/static_pages/about'
-      expect(page).to have_content('About Us')
-    end
+  describe "About ページのテスト" do
+    before { visit about_path }
 
-    it "'About Us' というタイトルを含んでるか？" do
-      visit '/static_pages/about'
-      expect(page).to have_title("Ruby on Rails Tutorial Sample App | About Us")
-    end
+    it { should have_content('About') }
+    it { should have_title(full_title('About Us')) }
   end
 
-  describe "Contact ページ" do
-    it "'Contact' という文字が含まれていないといけない" do
-      visit '/static_pages/contact'
-      expect(page).to have_content('Contact')
-    end
+  describe "Contact ページのテスト" do
+    before { visit contact_path }
 
-    it "'Contact' というタイトルを含んでるか？" do
-      visit '/static_pages/contact'
-      expect(page).to have_title("Ruby on Rails Tutorial Sample App | Contact")
-    end
+    it { should have_content('Contact') }
+    it { should have_title(full_title('Contact')) }
   end
 
 end
