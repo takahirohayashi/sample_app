@@ -13,6 +13,7 @@ describe User do
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
+  it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
 
   it { should be_valid } # 単なる健全性チェックです。これを使用して、まず@userというsubjectが有効かどうかを確認します。
@@ -109,6 +110,13 @@ describe User do
       # user_for_invalid_passwordはfalseであることを確認 specifyは主語が変なときに使うだけ。itと意味は変わらない
       specify { expect(user_for_invalid_password).to be_false }
     end
+  end
+
+  # 記憶トークンのテスト
+  describe "remember token" do
+    before { @user.save }
+    its(:remember_token) { should_not be_blank } # its @userの:remember_token が ブランクじゃないこと
+    # it { expect(@user.remember_token).not_to be_blank } 上記と同じ
   end
 
 end
