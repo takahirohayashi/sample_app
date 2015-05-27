@@ -15,8 +15,19 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:admin) }
 
   it { should be_valid } # 単なる健全性チェックです。これを使用して、まず@userというsubjectが有効かどうかを確認します。
+  it { should_not be_admin }
+
+  describe "with admin attribute set to 'true'" do
+    before do
+      @user.save!
+      @user.toggle!(:admin) # toggle!メソッドを使用して、admin属性の状態をfalseからtrueに反転しています。
+    end
+
+    it { should be_admin }
+  end
 
   describe "when name is not present" do
     before { @user.name = " " }
