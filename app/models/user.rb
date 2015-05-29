@@ -1,4 +1,9 @@
 class User < ActiveRecord::Base
+  # ユーザー自体が破棄されたときに、そのユーザーに依存するマイクロポストも
+  # 破棄されることを指定しています。
+  # これは、管理者がシステムからユーザーを削除したときに、
+  # 依存するユーザーが存在しないマイクロポストがデータベースに取り残されてしまうことを防ぎます。
+  has_many :microposts, dependent: :destroy
   # コールバックとは、Active Recordオブジェクトが持続している間のどこかの時点で、
   # Active Recordオブジェクトに呼び出してもらうメソッドです
   # 今回の場合は、before_saveコールバックを使います。
@@ -21,6 +26,17 @@ class User < ActiveRecord::Base
 
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def feed
+    # user_idが現在のユーザーidと等しいマイクロポストを見つけることによって、
+    # 適切なマイクロポストのfeedメソッドを実装することができます。
+    # これはMicropostモデルでwhereメソッドを使用することで実現できます。
+    # 疑問符があることで、SQLクエリにインクルードされる前にidが適切にエスケープされることを
+    # 保証してくれるため、SQLインジェクションと呼ばれる深刻なセキュリティホールを避けることができます。
+    # この場合のid属性は単なる整数であるため危険はありませんが、
+    # SQL文にインクルードされる変数を常にエスケープする習慣はぜひ身につけてください。
+    Micropost.where("user_id = ?", id)
   end
 
   private

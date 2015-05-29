@@ -67,12 +67,22 @@ describe "User pagesのテスト" do
 
   describe "profile pageのテスト" do
     let(:user) { FactoryGirl.create(:user) } # Factory Girlで userを作成して、:userに入れる
+    let!(:m1)  { FactoryGirl.create(:micropost, user: user, content: "Foo") }
+    let!(:m2)  { FactoryGirl.create(:micropost, user: user, content: "Bar") }
+
     # :userデータでuser pageに行く。
     # page；レスポンスがHTMLである場合、その内容を本メソッドで取得できる。これはCapybaraの機能のひとつ。
     before { visit user_path(user) }
 
     it { should have_content(user.name) } # pageのコンテントはuser.nameを持っていることを確認
     it { should have_title(user.name) } # pageはタイトルにuser.nameを持っていることを確認
+
+    describe "microposts" do
+      it { should have_content(m1.content) }
+      it { should have_content(m2.content) }
+      it { should have_content(user.microposts.count) } # count関連付けメソッドは賢くできていて、直接データベースでカウントを行います。
+    end
+
   end
 
   describe "signup pageのテスト" do
